@@ -29,16 +29,16 @@ namespace InventoryManagement.Application.UI
                 MainMenu.ShowHeader("📥 PURCHASE MANAGEMENT");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("\n╔════════════════════════════════════════════╗");
-                Console.WriteLine("║             📋 PURCHASE MENU              ║");
-                Console.WriteLine("╠════════════════════════════════════════════╣");
+                Console.WriteLine("  ╔════════════════════════════════════════════╗");
+                Console.WriteLine("  ║               📋 PURCHASE MENU             ║");
+                Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("║ 1️⃣  List Purchases          📋            ║");
-                Console.WriteLine("║ 2️⃣  View Purchase Details   🔍            ║");
-                Console.WriteLine("║ 3️⃣  Register New Purchase   ➕            ║");
-                Console.WriteLine("║ 0️⃣  Return to Main Menu     ↩️            ║");
-                Console.WriteLine("╚════════════════════════════════════════════╝");
+                Console.WriteLine("  ║       1️⃣  List Purchases          📋        ║");
+                Console.WriteLine("  ║       2️⃣  View Purchase Details   🔍        ║");
+                Console.WriteLine("  ║       3️⃣  Register New Purchase   ➕        ║");
+                Console.WriteLine("  ║       0️⃣  Return to Main Menu     ↩️         ║");
+                Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;

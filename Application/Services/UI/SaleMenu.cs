@@ -31,16 +31,16 @@ namespace InventoryManagement.Application.UI
                 MainMenu.ShowHeader("💰 SALES MANAGEMENT");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("\n╔════════════════════════════════════════════╗");
-                Console.WriteLine("║             📋 SALES MENU                 ║");
-                Console.WriteLine("╠════════════════════════════════════════════╣");
+                Console.WriteLine("  ╔════════════════════════════════════════════╗");
+                Console.WriteLine("  ║             📋 SALES MENU                  ║");
+                Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("║ 1️⃣  List Sales              📋            ║");
-                Console.WriteLine("║ 2️⃣  Show Sale Details       🔍            ║");
-                Console.WriteLine("║ 3️⃣  Register New Sale       ➕            ║");
-                Console.WriteLine("║ 0️⃣  Return to Main Menu     ↩️            ║");
-                Console.WriteLine("╚════════════════════════════════════════════╝");
+                Console.WriteLine("  ║       1️⃣  List Sales              📋        ║");
+                Console.WriteLine("  ║       2️⃣  Show Sale Details       🔍        ║");
+                Console.WriteLine("  ║       3️⃣  Register New Sale       ➕        ║");
+                Console.WriteLine("  ║       0️⃣  Return to Main Menu     ↩️         ║");
+                Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;
