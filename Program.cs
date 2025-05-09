@@ -11,7 +11,7 @@ namespace InventoryManagement
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            // Start the application
+            // Start the applicatioon
             try
             {
                 // Configure database connection
