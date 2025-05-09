@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\1 Usuario\\Desktop\\InventoryManagement\\InventoryManagement.csproj": {}
+    "C:\\Users\\USUARIO\\Documents\\Actividad\\InventoryManagement\\InventoryManagement.csproj": {}
   },
   "projects": {
-    "D:\\1 Usuario\\Desktop\\InventoryManagement\\InventoryManagement.csproj": {
+    "C:\\Users\\USUARIO\\Documents\\Actividad\\InventoryManagement\\InventoryManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\1 Usuario\\Desktop\\InventoryManagement\\InventoryManagement.csproj",
+        "projectUniqueName": "C:\\Users\\USUARIO\\Documents\\Actividad\\InventoryManagement\\InventoryManagement.csproj",
         "projectName": "InventoryManagement",
-        "projectPath": "D:\\1 Usuario\\Desktop\\InventoryManagement\\InventoryManagement.csproj",
-        "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-        "outputPath": "D:\\1 Usuario\\Desktop\\InventoryManagement\\obj\\",
+        "projectPath": "C:\\Users\\USUARIO\\Documents\\Actividad\\InventoryManagement\\InventoryManagement.csproj",
+        "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\USUARIO\\Documents\\Actividad\\InventoryManagement\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Usuario\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -42,6 +42,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "MySql.Data": {
+              "target": "Package",
+              "version": "[9.3.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
