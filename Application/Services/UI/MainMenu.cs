@@ -51,6 +51,7 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║     3️⃣  Purchases Management   📥           ║");
                 Console.WriteLine("  ║     4️⃣  Cash Flow              💵           ║");
                 Console.WriteLine("  ║     5️⃣  Promotional Plans      🎁           ║");
+                Console.WriteLine("  ║     5️⃣  Person                 👤           ║");
                 Console.WriteLine("  ║     0️⃣  Exit                   ❌           ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -74,6 +75,9 @@ namespace InventoryManagement.Application.UI
                         break;
                     case "5":
                         _planMenu.ShowMenu();
+                        break;
+                    case "6":
+                        //_personMenu.ShowMenu();
                         break;
                     case "0":
                         exit = true;
