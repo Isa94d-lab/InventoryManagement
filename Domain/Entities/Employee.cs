@@ -5,7 +5,7 @@ namespace InventoryManagement.Domain.Entities
         public int Id { get; set; }
         public string PersonId { get; set; } = string.Empty;
         public DateTime JoinDate { get; set; }
-        public double BaseSalary { get; set; }
+        public decimal BaseSalary { get; set; }
         public int EpsId { get; set; }
         public int ArlId { get; set; }
         

@@ -28,7 +28,7 @@ namespace InventoryManagement.Application.UI
             _purchaseMenu = new PurchaseMenu(connection);
             _cashFlowMenu = new CashFlowMenu(connection);
             _planMenu = new PlanMenu(connection);
-            _personMenu = new PersonMenu(connection);
+            _personMenu = new PersonMenu();
         }
 
         public void ShowMenu()
