@@ -4,7 +4,7 @@ namespace InventoryManagement.Domain.Entities
     {
         public int Id { get; set; }
         public string PersonId { get; set; } = string.Empty;
-        public decimal Discount { get; set; }
+        public double Discount { get; set; }
         public int PayDay { get; set; }
         
         // Propiedades de navegación
