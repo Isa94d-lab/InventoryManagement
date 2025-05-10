@@ -15,6 +15,7 @@ namespace InventoryManagement.Application.UI
         private readonly PurchaseMenu _purchaseMenu;
         private readonly CashFlowMenu _cashFlowMenu;
         private readonly PlanMenu _planMenu;
+        private readonly PersonMenu _personMenu;
         
         public MainMenu()
         {
@@ -27,6 +28,7 @@ namespace InventoryManagement.Application.UI
             _purchaseMenu = new PurchaseMenu(connection);
             _cashFlowMenu = new CashFlowMenu(connection);
             _planMenu = new PlanMenu(connection);
+            _personMenu = new PersonMenu(connection);
         }
 
         public void ShowMenu()
@@ -77,7 +79,7 @@ namespace InventoryManagement.Application.UI
                         _planMenu.ShowMenu();
                         break;
                     case "6":
-                        //_personMenu.ShowMenu();
+                        _personMenu.ShowMenu();
                         break;
                     case "0":
                         exit = true;
