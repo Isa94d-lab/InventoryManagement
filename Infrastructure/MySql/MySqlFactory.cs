@@ -45,4 +45,23 @@ public class MySqlDbFactory : IDbFactory
         return new SaleRepository(connection);
     }
 
+    public IEmployeeRepository CreateEmployeeRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new EmployeeRepository(connection);
+    }
+
+    public ISupplierRepository CreateSupplierRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new SupplierRepository(connection);
+    }
+
+    public ICustomerRepository CreateCustomerRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new CustomerRepository(connection);
+    }
+
+
 }
