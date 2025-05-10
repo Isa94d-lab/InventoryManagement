@@ -1,24 +1,25 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InventoryManagement.Domain.Entities;
-using InventoryManagement.Infrastructure.Repositories;
+using InventoryManagement.Application.UI;
 using MySql.Data.MySqlClient;
 
 namespace InventoryManagement.Application.UI
 {
     public class PersonMenu
     {
-        //private readonly PersonRepository _personRepository;
+        private readonly CustomerMenu _customerMenu;
+        private readonly SupplierMenu _supplierMenu;
+        private readonly EmployeeMenu _employeeMenu;
+
         public PersonMenu(MySqlConnection connection)
         {
-            //_personRepository = new PersonRepository(connection);
+            _customerMenu = new CustomerMenu(connection);
+            _supplierMenu = new SupplierMenu(connection);
+            _employeeMenu = new EmployeeMenu(connection);
         }
-        
+
         public void ShowMenu()
         {
-            bool returnTo = false; 
+            bool returnTo = false;
 
             while (!returnTo)
             {
@@ -44,13 +45,13 @@ namespace InventoryManagement.Application.UI
                 switch (option)
                 {
                     case "1":
-                        //_customerMenu.ShowMenu();
+                        _customerMenu.ShowMenu();
                         break;
                     case "2":
-                        //_supplierMenu.ShowMenu();
+                        _supplierMenu.ShowMenu();
                         break;
                     case "3":
-                        //_employeeMenu.ShowMenu();
+                        _employeeMenu.ShowMenu();
                         break;
                     case "0":
                         returnTo = true;
@@ -62,7 +63,7 @@ namespace InventoryManagement.Application.UI
                 }
             }
 
-            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);  
+            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);
         }
     }
 }
