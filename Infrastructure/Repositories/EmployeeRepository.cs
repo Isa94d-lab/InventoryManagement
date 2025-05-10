@@ -16,11 +16,23 @@ namespace InventoryManagement.Infrastructure.Repositories
             _connection = connection;
         }
 
+        private async Task<bool> PersonExistsAsync(string personId)
+        {
+            using var command = new MySqlCommand("SELECT COUNT(*) FROM tercero WHERE id = @PersonId", _connection);
+            command.Parameters.AddWithValue("@PersonId", personId);
+            var count = Convert.ToInt32(await command.ExecuteScalarAsync());
+            return count > 0;
+        }
+
         public async Task<IEnumerable<Employee>> GetAllAsync()
         {
             var employees = new List<Employee>();
 
-            using var command = new MySqlCommand("SELECT * FROM empleado", _connection);
+            using var command = new MySqlCommand(@"
+                SELECT e.*, t.nombre, t.apellidos 
+                FROM empleado e
+                INNER JOIN tercero t ON e.tercero_id = t.id", _connection);
+
             using var reader = await command.ExecuteReaderAsync();
 
             while (await reader.ReadAsync())
@@ -29,10 +41,15 @@ namespace InventoryManagement.Infrastructure.Repositories
                 {
                     Id = Convert.ToInt32(reader["id"]),
                     PersonId = reader["tercero_id"].ToString()!,
-                    JoinDate = Convert.ToDateTime(reader["fecha_ingreso"]),
-                    BaseSalary = Convert.ToDouble(reader["salario_base"]),
+                    BaseSalary = Convert.ToDecimal(reader["salario_base"]),
+                    ArlId = Convert.ToInt32(reader["arl_id"]),
                     EpsId = Convert.ToInt32(reader["eps_id"]),
-                    ArlId = Convert.ToInt32(reader["arl_id"])
+                    Person = new Person
+                    {
+                        Id = reader["tercero_id"].ToString()!,
+                        Name = reader["nombre"].ToString()!,
+                        LastName = reader["apellidos"].ToString()!
+                    }
                 });
             }
 
@@ -43,20 +60,31 @@ namespace InventoryManagement.Infrastructure.Repositories
         {
             Employee? employee = null;
 
-            using var command = new MySqlCommand("SELECT * FROM empleado WHERE id = @Id", _connection);
+            using var command = new MySqlCommand(@"
+                SELECT e.*, t.nombre, t.apellidos 
+                FROM empleado e
+                INNER JOIN tercero t ON e.tercero_id = t.id
+                WHERE e.id = @Id", _connection);
+
             command.Parameters.AddWithValue("@Id", id);
 
             using var reader = await command.ExecuteReaderAsync();
+
             if (await reader.ReadAsync())
             {
                 employee = new Employee
                 {
                     Id = Convert.ToInt32(reader["id"]),
                     PersonId = reader["tercero_id"].ToString()!,
-                    JoinDate = Convert.ToDateTime(reader["fecha_ingreso"]),
-                    BaseSalary = Convert.ToDouble(reader["salario_base"]),
+                    BaseSalary = Convert.ToDecimal(reader["salario_base"]),
+                    ArlId = Convert.ToInt32(reader["arl_id"]),
                     EpsId = Convert.ToInt32(reader["eps_id"]),
-                    ArlId = Convert.ToInt32(reader["arl_id"])
+                    Person = new Person
+                    {
+                        Id = reader["tercero_id"].ToString()!,
+                        Name = reader["nombre"].ToString()!,
+                        LastName = reader["apellidos"].ToString()!
+                    }
                 };
             }
 
@@ -65,43 +93,112 @@ namespace InventoryManagement.Infrastructure.Repositories
 
         public async Task<bool> InsertAsync(Employee employee)
         {
-            using var command = new MySqlCommand(@"
-                INSERT INTO empleado (tercero_id, fecha_ingreso, salario_base, eps_id, arl_id)
-                VALUES (@TerceroId, @FechaIngreso, @SalarioBase, @EpsId, @ArlId)", _connection);
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee));
 
-            command.Parameters.AddWithValue("@TerceroId", employee.PersonId);
-            command.Parameters.AddWithValue("@FechaIngreso", employee.JoinDate);
-            command.Parameters.AddWithValue("@SalarioBase", employee.BaseSalary);
-            command.Parameters.AddWithValue("@EpsId", employee.EpsId);
-            command.Parameters.AddWithValue("@ArlId", employee.ArlId);
+            if (string.IsNullOrEmpty(employee.PersonId))
+                throw new ArgumentException("Person ID cannot be empty", nameof(employee.PersonId));
 
-            return await command.ExecuteNonQueryAsync() > 0;
+            if (employee.BaseSalary <= 0)
+                throw new ArgumentException("Base salary must be greater than zero", nameof(employee.BaseSalary));
+
+            if (employee.ArlId <= 0)
+                throw new ArgumentException("ARL ID must be greater than zero", nameof(employee.ArlId));
+
+            if (employee.EpsId <= 0)
+                throw new ArgumentException("EPS ID must be greater than zero", nameof(employee.EpsId));
+
+            // Verificar si el tercero existe
+            if (!await PersonExistsAsync(employee.PersonId))
+                throw new ArgumentException($"Person with ID {employee.PersonId} does not exist", nameof(employee.PersonId));
+
+            using var transaction = await _connection.BeginTransactionAsync();
+            try
+            {
+                using var command = new MySqlCommand(
+                    "INSERT INTO empleado (tercero_id, salario_base, arl_id, eps_id) VALUES (@PersonId, @BaseSalary, @ArlId, @EpsId)",
+                    _connection,
+                    transaction);
+
+                command.Parameters.AddWithValue("@PersonId", employee.PersonId);
+                command.Parameters.AddWithValue("@BaseSalary", employee.BaseSalary);
+                command.Parameters.AddWithValue("@ArlId", employee.ArlId);
+                command.Parameters.AddWithValue("@EpsId", employee.EpsId);
+
+                var result = await command.ExecuteNonQueryAsync() > 0;
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<bool> UpdateAsync(Employee employee)
         {
-            using var command = new MySqlCommand(@"
-                UPDATE empleado 
-                SET tercero_id = @TerceroId, fecha_ingreso = @FechaIngreso, salario_base = @SalarioBase, 
-                    eps_id = @EpsId, arl_id = @ArlId
-                WHERE id = @Id", _connection);
+            if (employee == null)
+                throw new ArgumentNullException(nameof(employee));
 
-            command.Parameters.AddWithValue("@Id", employee.Id);
-            command.Parameters.AddWithValue("@TerceroId", employee.PersonId);
-            command.Parameters.AddWithValue("@FechaIngreso", employee.JoinDate);
-            command.Parameters.AddWithValue("@SalarioBase", employee.BaseSalary);
-            command.Parameters.AddWithValue("@EpsId", employee.EpsId);
-            command.Parameters.AddWithValue("@ArlId", employee.ArlId);
+            if (string.IsNullOrEmpty(employee.PersonId))
+                throw new ArgumentException("Person ID cannot be empty", nameof(employee.PersonId));
 
-            return await command.ExecuteNonQueryAsync() > 0;
+            if (employee.BaseSalary <= 0)
+                throw new ArgumentException("Base salary must be greater than zero", nameof(employee.BaseSalary));
+
+            if (employee.ArlId <= 0)
+                throw new ArgumentException("ARL ID must be greater than zero", nameof(employee.ArlId));
+
+            if (employee.EpsId <= 0)
+                throw new ArgumentException("EPS ID must be greater than zero", nameof(employee.EpsId));
+
+            // Verificar si el tercero existe
+            if (!await PersonExistsAsync(employee.PersonId))
+                throw new ArgumentException($"Person with ID {employee.PersonId} does not exist", nameof(employee.PersonId));
+
+            using var transaction = await _connection.BeginTransactionAsync();
+            try
+            {
+                using var command = new MySqlCommand(
+                    "UPDATE empleado SET tercero_id = @PersonId, salario_base = @BaseSalary, arl_id = @ArlId, eps_id = @EpsId WHERE id = @Id",
+                    _connection,
+                    transaction);
+
+                command.Parameters.AddWithValue("@Id", employee.Id);
+                command.Parameters.AddWithValue("@PersonId", employee.PersonId);
+                command.Parameters.AddWithValue("@BaseSalary", employee.BaseSalary);
+                command.Parameters.AddWithValue("@ArlId", employee.ArlId);
+                command.Parameters.AddWithValue("@EpsId", employee.EpsId);
+
+                var result = await command.ExecuteNonQueryAsync() > 0;
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
         public async Task<bool> DeleteAsync(object id)
         {
-            using var command = new MySqlCommand("DELETE FROM empleado WHERE id = @Id", _connection);
-            command.Parameters.AddWithValue("@Id", id);
+            using var transaction = await _connection.BeginTransactionAsync();
+            try
+            {
+                using var command = new MySqlCommand("DELETE FROM empleado WHERE id = @Id", _connection, transaction);
+                command.Parameters.AddWithValue("@Id", id);
 
-            return await command.ExecuteNonQueryAsync() > 0;
+                var result = await command.ExecuteNonQueryAsync() > 0;
+                await transaction.CommitAsync();
+                return result;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

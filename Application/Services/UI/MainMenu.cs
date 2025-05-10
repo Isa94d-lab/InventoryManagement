@@ -28,7 +28,7 @@ namespace InventoryManagement.Application.UI
             _purchaseMenu = new PurchaseMenu(connection);
             _cashFlowMenu = new CashFlowMenu(connection);
             _planMenu = new PlanMenu(connection);
-            _personMenu = new PersonMenu(connection);
+            _personMenu = new PersonMenu();
         }
 
         public void ShowMenu()
@@ -53,7 +53,7 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║     3️⃣  Purchases Management   📥           ║");
                 Console.WriteLine("  ║     4️⃣  Cash Flow              💵           ║");
                 Console.WriteLine("  ║     5️⃣  Promotional Plans      🎁           ║");
-                Console.WriteLine("  ║     5️⃣  Person                 👤           ║");
+                Console.WriteLine("  ║     6️⃣  Person                 👤           ║");
                 Console.WriteLine("  ║     0️⃣  Exit                   ❌           ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
