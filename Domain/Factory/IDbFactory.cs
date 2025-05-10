@@ -13,5 +13,9 @@ public interface IDbFactory
     IEmployeeRepository CreateEmployeeRepository();
     ISupplierRepository CreateSupplierRepository();
     ICustomerRepository CreateCustomerRepository();
+    ICountryRepository CreateCountryRepository();
+    IRegionRepository CreateRegionRepository();
+    ICityRepository CreateCityRepository();
+
 
 }
