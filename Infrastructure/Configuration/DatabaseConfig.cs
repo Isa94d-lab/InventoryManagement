@@ -4,7 +4,7 @@ namespace InventoryManagement.Infrastructure.Configuration
 {
     public static class DatabaseConfig
     {
-        private static string _connectionString = "Server=localhost;Database=sistemainventario;User=campus2023;Password=campus2023;";
+        private static string _connectionString = "Server=localhost;Database=sistemainventario;User=root;Password=5comentariosxdd.;";
         private static MySqlConnection? _connection;
 
         public static MySqlConnection GetConnection()

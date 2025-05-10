@@ -26,19 +26,19 @@ namespace InventoryManagement.Application.UI
                 MainMenu.ShowHeader("🛒 PRODUCTS MANAGEMENT");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("\n╔════════════════════════════════════════════╗");
-                Console.WriteLine("║             📋 PRODUCTS MENU              ║");
-                Console.WriteLine("╠════════════════════════════════════════════╣");
+                Console.WriteLine("  ╔═══════════════════════════════════════════╗");
+                Console.WriteLine("  ║               📋 PRODUCTS MENU            ║");
+                Console.WriteLine("  ╠═══════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("║ 1️⃣  List Products           📋            ║");
-                Console.WriteLine("║ 2️⃣  Search Product         🔍            ║");
-                Console.WriteLine("║ 3️⃣  New Product            ➕            ║");
-                Console.WriteLine("║ 4️⃣  Update Product         ✏️            ║");
-                Console.WriteLine("║ 5️⃣  Delete Product         🗑️            ║");
-                Console.WriteLine("║ 6️⃣  Low Stock Products     ⚠️            ║");
-                Console.WriteLine("║ 0️⃣  Return to Main Menu    ↩️            ║");
-                Console.WriteLine("╚════════════════════════════════════════════╝");
+                Console.WriteLine("  ║      1️⃣  List Products          📋         ║");
+                Console.WriteLine("  ║      2️⃣  Search Product        🔍          ║");
+                Console.WriteLine("  ║      3️⃣  New Product           ➕          ║");
+                Console.WriteLine("  ║      4️⃣  Update Product         ✏️          ║");
+                Console.WriteLine("  ║      5️⃣  Delete Product         🗑️          ║");
+                Console.WriteLine("  ║      6️⃣  Low Stock Products     ⚠️          ║");
+                Console.WriteLine("  ║      0️⃣  Return to Main Menu    ↩️          ║");
+                Console.WriteLine("  ╚═══════════════════════════════════════════╝");
 
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;

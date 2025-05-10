@@ -10,5 +10,8 @@ public interface IDbFactory
     IPromotionalPlanRepository CreatePromotionalPlanRepository();
     ICashFlowRepository CreateCashFlowRepository();
     ISaleRepository CreateSaleRepository();
+    IEmployeeRepository CreateEmployeeRepository();
+    ISupplierRepository CreateSupplierRepository();
+    ICustomerRepository CreateCustomerRepository();
 
 }

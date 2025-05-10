@@ -27,16 +27,16 @@ namespace InventoryManagement.Application.UI
                 MainMenu.ShowHeader("💵 CASH FLOW MANAGEMENT");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("\n╔════════════════════════════════════════════╗");
-                Console.WriteLine("║             📋 CASH FLOW MENU             ║");
-                Console.WriteLine("╠════════════════════════════════════════════╣");
+                Console.WriteLine("  ╔════════════════════════════════════════════╗");
+                Console.WriteLine("  ║             📋 CASH FLOW MENU              ║");
+                Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("║ 1️⃣  List Cash Flow           📋            ║");
-                Console.WriteLine("║ 2️⃣  Show Cash Flow Details   🔍            ║");
-                Console.WriteLine("║ 3️⃣  Register New Cash Flow   ➕            ║");
-                Console.WriteLine("║ 0️⃣  Return to Main Menu      ↩️            ║");
-                Console.WriteLine("╚════════════════════════════════════════════╝");
+                Console.WriteLine("  ║     1️⃣  List Cash Flow           📋         ║");
+                Console.WriteLine("  ║     2️⃣  Show Cash Flow Details   🔍         ║");
+                Console.WriteLine("  ║     3️⃣  Register New Cash Flow   ➕         ║");
+                Console.WriteLine("  ║     0️⃣  Return to Main Menu      ↩️          ║");
+                Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;

@@ -15,6 +15,7 @@ namespace InventoryManagement.Application.UI
         private readonly PurchaseMenu _purchaseMenu;
         private readonly CashFlowMenu _cashFlowMenu;
         private readonly PlanMenu _planMenu;
+        private readonly PersonMenu _personMenu;
         
         public MainMenu()
         {
@@ -27,6 +28,7 @@ namespace InventoryManagement.Application.UI
             _purchaseMenu = new PurchaseMenu(connection);
             _cashFlowMenu = new CashFlowMenu(connection);
             _planMenu = new PlanMenu(connection);
+            _personMenu = new PersonMenu(connection);
         }
 
         public void ShowMenu()
@@ -40,19 +42,20 @@ namespace InventoryManagement.Application.UI
 
                 // Menu border and title
                 Console.ForegroundColor = ConsoleColor.Magenta;
-                Console.WriteLine("\n╔════════════════════════════════════════════╗");
-                Console.WriteLine("║             📋 MAIN MENU                   ║");
-                Console.WriteLine("╠════════════════════════════════════════════╣");
+                Console.WriteLine("  ╔════════════════════════════════════════════╗");
+                Console.WriteLine("  ║                📋 MAIN MENU                ║");
+                Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 // Menu options with emojis
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("║ 1️⃣  Products Management     🛒            ║");
-                Console.WriteLine("║ 2️⃣  Sales Management        💰            ║");
-                Console.WriteLine("║ 3️⃣  Purchases Management    📥            ║");
-                Console.WriteLine("║ 4️⃣  Cash Flow              💵            ║");
-                Console.WriteLine("║ 5️⃣  Promotional Plans      🎁            ║");
-                Console.WriteLine("║ 0️⃣  Exit                   ❌            ║");
-                Console.WriteLine("╚════════════════════════════════════════════╝");
+                Console.WriteLine("  ║     1️⃣  Products Management    🛒           ║");
+                Console.WriteLine("  ║     2️⃣  Sales Management       💰           ║");
+                Console.WriteLine("  ║     3️⃣  Purchases Management   📥           ║");
+                Console.WriteLine("  ║     4️⃣  Cash Flow              💵           ║");
+                Console.WriteLine("  ║     5️⃣  Promotional Plans      🎁           ║");
+                Console.WriteLine("  ║     5️⃣  Person                 👤           ║");
+                Console.WriteLine("  ║     0️⃣  Exit                   ❌           ║");
+                Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Yellow;
@@ -74,6 +77,9 @@ namespace InventoryManagement.Application.UI
                         break;
                     case "5":
                         _planMenu.ShowMenu();
+                        break;
+                    case "6":
+                        _personMenu.ShowMenu();
                         break;
                     case "0":
                         exit = true;
