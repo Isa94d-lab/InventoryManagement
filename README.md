@@ -26,11 +26,11 @@ InventoryManagementSystem/
 ```
 
 ## Funcionalidades Principales ✅
-- Gestion de productos, compras y ventas
-- Administracion de empleados, cliente y proveedores
-- Control flujo de caja
-- Interfaces intuitivas
-- Conexion con base de datos MySql
+- Gestion de productos, compras y ventas.
+- Administracion de empleados, cliente y proveedores.
+- Control flujo de caja.
+- Interfaces intuitivas.
+- Conexion con base de datos MySql.
 
 ## Historial de Commits 📈
 <img src="https://github.com/user-attachments/assets/dfc3f42f-44b9-468d-91be-d8e29480dc5f">
@@ -43,7 +43,7 @@ InventoryManagementSystem/
 ## Instalacion 📥
 1. Prerrequisitos
 - Git: Necesitaras Git para clonar el repositorio. Descargalo desde [git](https://git-scm.com/) 
-- Un editor de texto como VSCode o cualquier otro de tu preferencia
+- Un editor de texto como VSCode o cualquier otro de tu preferencia.
 - MYSQL: Es necesario instalar el programa MYSQL. Descargalo desde [MYSQL](https://dev.mysql.com/downloads/installer/)
 
 2. Codigos en la terminal para instalar el proyecto
