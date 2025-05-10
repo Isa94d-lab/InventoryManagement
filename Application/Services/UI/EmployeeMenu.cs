@@ -12,11 +12,9 @@ namespace InventoryManagement.Application.UI
     public class EmployeeMenu
     {
         private readonly EmployeeRepository _employeeRepository;
-        //private readonly PersonRepository _personRepository;
         public EmployeeMenu(MySqlConnection connection)
         {
             _employeeRepository = new EmployeeRepository(connection);
-            //_personRepository = new PersonRepository(connection);
         }
 
         public void ShowMenu()
