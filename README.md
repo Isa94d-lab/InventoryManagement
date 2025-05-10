@@ -1,7 +1,8 @@
 # InventoryManagement
 
 ## Descripción 📌
-Este proyecto en C# implementa un sistema de gestión de inventario y flujo de caja utilizando una arquitectura hexagonal. La aplicación permite gestionar productos, compras, ventas, empleados, clientes y proveedores a traves de interfaces intuitivas ademas incluyendo funcionalidades avanzadas como planes promocionales y seguimiento de movimientos de caja.
+InventoryManagement es una aplicación de consola desarrollada en C# que implementa un sistema de gestión de inventario y flujo de caja, siguiendo la arquitectura hexagonal y los principios SOLID.
+Permite administrar productos, compras, ventas, empleados, clientes y proveedores a través de interfaces intuitivas, además de ofrecer funcionalidades avanzadas como planes promocionales y seguimiento de movimientos de caja.
 
 ## Estructura del Proyecto 🏗️
 El proyecto sigue una estructura clara basada en la arquitectura hexagonal:
@@ -40,35 +41,47 @@ InventoryManagementSystem/
 - Base de datos: MySql
 - ORM: Conexión directa con MySqlConnector
 
-## Instalacion 📥
-1. Prerrequisitos
-- Git: Necesitaras Git para clonar el repositorio. Descargalo desde [git](https://git-scm.com/) 
-- Un editor de texto como VSCode o cualquier otro de tu preferencia.
-- MYSQL: Es necesario instalar el programa MYSQL. Descargalo desde [MYSQL](https://dev.mysql.com/downloads/installer/)
+## Instalación 📥
+### 🔧 Requisitos Previos
+- Tener instalado [Git](https://git-scm.com/)
+- Tener instalado [MYSQL](https://dev.mysql.com/downloads/installer/)
+- Un editor de código como Visual Studio Code, Visual Studio, o el de tu preferencia.
+- SDK de .NET
 
-2. Codigos en la terminal para instalar el proyecto
+### 🚀 Pasos de ejecución
 
-- Clonar Repositorio
+1. Clonar Repositorio
+
 ```bash git clone https://github.com/Isa94d-lab/InventoryManagement.git ```
-- Ir al directorio del repositorio
+
+2. Ir al directorio del repositorio
 ```bash cd InventoryManagement ```
 
-- Instalar la libreria necesaria
+3. Instalar la libreria necesaria para la conexión a la base de datos
 ```bash dotnet add package MySqlConnector ```
 
-4. Pasos despues de la clonacion del repositorio
+### Configuración Base de Datos:
 
-- 1. Instalar la extension "SQL" en tu editor de texto <br>
-- 2. Abrir la extension anterior y dar click en la opcion de agregar conexion <br>
+- Abre tu editor de texto y asegúrate de tener instalada la extensión SQL.
+
+- Agrega una nueva conexión usando tus credenciales de MySQL:
+
 <img src="https://github.com/user-attachments/assets/fb01eec1-e270-49ac-b861-901a6a8b0230" height="70px">
 
-- 3. Se mostrara la siguiente pagina en la que sera necesario ingresa el Username y Password ingresados durante la instalacion del programa MYSQL. <br>
+- Ingresa el usuario y contraseña establecidos durante la instalación:
+
 <img src="https://github.com/user-attachments/assets/73680b8d-5c34-4995-add3-7f235c13e2d9">
 
-- 4. Ejecutar los siguientes 2 archivos ddl.sql(Base de datos) y dml.sql(Insercion de datos) ya sea manualmente o en la terminal.  <br>
+- Ejecuta los scripts para crear la base de datos y poblarla:
+    - [DDL: Estructura](./db/ddl.sql)
+    - [DML: Inserción de datos](./db/dml.sql)
+
 <img src="https://github.com/user-attachments/assets/a5c9439f-3505-4e74-b1e9-310f52bb938a" height="100px">
 
-- 5. Ejecutar archivo principal (Program.cs) <br>
+### Ejecución:
+```
+dotnet run
+```
 
 ## Colaboradores ✒️
 ### Isabella Stefphani Galvis <br>

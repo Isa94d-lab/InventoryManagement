@@ -16,6 +16,7 @@ namespace InventoryManagement.Application.UI
         private readonly CashFlowMenu _cashFlowMenu;
         private readonly PlanMenu _planMenu;
         private readonly PersonMenu _personMenu;
+        private readonly LocationMenu _locationMenu;
         
         public MainMenu()
         {
@@ -29,6 +30,7 @@ namespace InventoryManagement.Application.UI
             _cashFlowMenu = new CashFlowMenu(connection);
             _planMenu = new PlanMenu(connection);
             _personMenu = new PersonMenu();
+            _locationMenu = new LocationMenu();
         }
 
         public void ShowMenu()
@@ -53,7 +55,8 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║     3️⃣  Purchases Management   📥           ║");
                 Console.WriteLine("  ║     4️⃣  Cash Flow              💵           ║");
                 Console.WriteLine("  ║     5️⃣  Promotional Plans      🎁           ║");
-                Console.WriteLine("  ║     5️⃣  Person                 👤           ║");
+                Console.WriteLine("  ║     6️⃣  Person                 👤           ║");
+                Console.WriteLine("  ║     7️⃣  Location               📍           ║");
                 Console.WriteLine("  ║     0️⃣  Exit                   ❌           ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -81,6 +84,9 @@ namespace InventoryManagement.Application.UI
                     case "6":
                         _personMenu.ShowMenu();
                         break;
+                    case "7":
+                        _locationMenu.ShowMenu();
+                        break;   
                     case "0":
                         exit = true;
                         break;

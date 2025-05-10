@@ -63,5 +63,23 @@ public class MySqlDbFactory : IDbFactory
         return new CustomerRepository(connection);
     }
 
+    public ICountryRepository CreateCountryRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new CountryRepository(connection);
+    }
+
+    public IRegionRepository CreateRegionRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new RegionRepository(connection);
+    }
+
+    public ICityRepository CreateCityRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new CityRepository(connection);
+    }
+
 
 }
