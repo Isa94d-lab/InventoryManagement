@@ -1,10 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InventoryManagement.Domain.Entities;
-using InventoryManagement.Infrastructure.Repositories;
-using InventoryManagement.Infrastructure.Configuration;
+using InventoryManagement.Application.UI;
 using MySql.Data.MySqlClient;
 
 namespace InventoryManagement.Application.UI
@@ -17,17 +12,14 @@ namespace InventoryManagement.Application.UI
 
         public PersonMenu(MySqlConnection connection)
         {
-            Console.OutputEncoding = System.Text.Encoding.UTF8;
-            Console.Title = "📦 Inventory Management System";
-
             _customerMenu = new CustomerMenu(connection);
-            _employeeMenu = new EmployeeMenu(connection);
             _supplierMenu = new SupplierMenu(connection);
+            _employeeMenu = new EmployeeMenu(connection);
         }
-        
+
         public void ShowMenu()
         {
-            bool returnTo = false; 
+            bool returnTo = false;
 
             while (!returnTo)
             {
@@ -40,10 +32,10 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("  ║       1️⃣  Customers           📋            ║");
-                Console.WriteLine("  ║       2️⃣  Supplier          ➕              ║");
-                Console.WriteLine("  ║       3️⃣  Employee         ✏️                ║");
-                Console.WriteLine("  ║       0️⃣  Return to Main Menu     ↩️         ║");
+                Console.WriteLine("  ║       1️⃣  Customers           📋          ║");
+                Console.WriteLine("  ║       2️⃣  Supplier          ➕            ║");
+                Console.WriteLine("  ║       3️⃣  Employee         ✏️             ║");
+                Console.WriteLine("  ║       0️⃣  Return to Main Menu     ↩️      ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
                 Console.ResetColor();
@@ -71,7 +63,7 @@ namespace InventoryManagement.Application.UI
                 }
             }
 
-            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);  
+            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);
         }
     }
 }
