@@ -39,7 +39,7 @@ namespace InventoryManagement.Infrastructure.Repositories
             return phones;
         }
 
-        // Obtener un teléfono por su ID
+        // Obtener un telefono por su ID
         public async Task<PersonTelephone?> GetByIdAsync(object id)
         {
             const string query = "SELECT id, numero, tercero_id, tipo_telefono FROM tercero_telefono WHERE id = @Id";
