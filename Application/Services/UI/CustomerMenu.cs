@@ -23,11 +23,12 @@ namespace InventoryManagement.Application.UI
             while (!returnTo)
             {
                 Console.Clear();
-                MainMenu.ShowHeader(" 🧔‍♂️ CUSTOMER MENU ");
+                MainMenu.ShowHeader(" 🚹 CUSTOMER MENU ");
+
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("  ╔════════════════════════════════════════════╗");
-                Console.WriteLine("  ║               🧔‍♂️ CUSTOMER MENU             ║");
+                Console.WriteLine("  ║               🚹 CUSTOMER MENU             ║");
                 Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;

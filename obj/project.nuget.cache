@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "eHx6nMJInHs=",
+  "dgSpecHash": "nj1ENAmS3EE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\USUARIO\\Documents\\CAMPUSLANDS\\InventoryManagement\\InventoryManagement.csproj",
+  "projectFilePath": "C:\\Users\\USUARIO\\Documents\\Nuevo\\InventoryManagement\\InventoryManagement.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\USUARIO\\.nuget\\packages\\bouncycastle.cryptography\\2.5.1\\bouncycastle.cryptography.2.5.1.nupkg.sha512",
     "C:\\Users\\USUARIO\\.nuget\\packages\\google.protobuf\\3.30.0\\google.protobuf.3.30.0.nupkg.sha512",

@@ -153,8 +153,6 @@ public class PurchaseRepository : IGenericRepository<Purchase>, IPurchaseReposit
 
                 await commandDetail.ExecuteNonQueryAsync();
 
-                // Aquí deberías tener implementado un método para actualizar el stock
-                // await ActualizarStockAsync(detail.ProductId, detail.Quantity, _connection);
             }
 
             await transaction.CommitAsync();
@@ -167,14 +165,37 @@ public class PurchaseRepository : IGenericRepository<Purchase>, IPurchaseReposit
         }
     }
 
-    public Task<bool> UpdateAsync(Purchase purchase)
+    public async Task<bool> UpdateAsync(Purchase purchase)
     {
-        return Task.FromResult(false);
+                const string query = @"
+            UPDATE compra 
+            SET fecha = @Fecha, 
+                terceroProveedor_id = @TerceroProveedorId, 
+                terceroEmpleado_id = @TerceroEmpleadoId, 
+                docCompra = @DocCompra
+            WHERE id = @Id";
+
+        using var command = new MySqlCommand(query, _connection);
+
+        command.Parameters.AddWithValue("@Id", purchase.Id);
+        command.Parameters.AddWithValue("@Fecha", purchase.Date);
+        command.Parameters.AddWithValue("@TerceroProveedorId", purchase.SupplierPersonId);
+        command.Parameters.AddWithValue("@TerceroEmpleadoId", purchase.EmployeePersonId);
+        command.Parameters.AddWithValue("@DocCompra", purchase.PurOrder);
+
+        return await command.ExecuteNonQueryAsync() > 0;
     }
 
-    public Task<bool> DeleteAsync(object id)
+    public async Task<bool> DeleteAsync(object id)
     {
-        return Task.FromResult(false);
+        using var command = new MySqlCommand(
+            "DELETE FROM compra WHERE id = @Id",
+            _connection);
+
+        command.Parameters.AddWithValue("@Id", id);
+
+        return await command.ExecuteNonQueryAsync() > 0;  
+
     }
 
     public async Task<IEnumerable<PurchaseDetail>> GetDetallesCompraAsync(int purchaseId)

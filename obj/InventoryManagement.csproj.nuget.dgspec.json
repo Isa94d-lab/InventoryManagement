@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\USUARIO\\Documents\\CAMPUSLANDS\\InventoryManagement\\InventoryManagement.csproj": {}
+    "C:\\Users\\USUARIO\\Documents\\Nuevo\\InventoryManagement\\InventoryManagement.csproj": {}
   },
   "projects": {
-    "C:\\Users\\USUARIO\\Documents\\CAMPUSLANDS\\InventoryManagement\\InventoryManagement.csproj": {
+    "C:\\Users\\USUARIO\\Documents\\Nuevo\\InventoryManagement\\InventoryManagement.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\USUARIO\\Documents\\CAMPUSLANDS\\InventoryManagement\\InventoryManagement.csproj",
+        "projectUniqueName": "C:\\Users\\USUARIO\\Documents\\Nuevo\\InventoryManagement\\InventoryManagement.csproj",
         "projectName": "InventoryManagement",
-        "projectPath": "C:\\Users\\USUARIO\\Documents\\CAMPUSLANDS\\InventoryManagement\\InventoryManagement.csproj",
+        "projectPath": "C:\\Users\\USUARIO\\Documents\\Nuevo\\InventoryManagement\\InventoryManagement.csproj",
         "packagesPath": "C:\\Users\\USUARIO\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\USUARIO\\Documents\\CAMPUSLANDS\\InventoryManagement\\obj\\",
+        "outputPath": "C:\\Users\\USUARIO\\Documents\\Nuevo\\InventoryManagement\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\USUARIO\\AppData\\Roaming\\NuGet\\NuGet.Config"
