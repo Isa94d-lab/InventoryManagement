@@ -305,9 +305,9 @@ namespace InventoryManagement.Application.UI
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine($"\nSupplier Information:");
                     Console.WriteLine($"ID: {supplier.Id}");
-                    Console.WriteLine($"EPS ID: {supplier.PersonId}");
-                    Console.WriteLine($"Base Salary: {supplier.Discount:C}");
-                    Console.WriteLine($"ARL ID: {supplier.PayDay}");
+                    Console.WriteLine($"Person ID: {supplier.PersonId}");
+                    Console.WriteLine($"Discount: {supplier.Discount:C}");
+                    Console.WriteLine($"Pay Day: {supplier.PayDay}");
                     Console.ResetColor();
                     
                     string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this supplier? (Y/N): ");

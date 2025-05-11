@@ -37,6 +37,8 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║       1️⃣  List Purchases          📋        ║");
                 Console.WriteLine("  ║       2️⃣  View Purchase Details   🔍        ║");
                 Console.WriteLine("  ║       3️⃣  Register New Purchase   ➕        ║");
+                Console.WriteLine("  ║       4️⃣  Delete Purchase         ❌        ║");
+                Console.WriteLine("  ║       5️⃣  Update Sale             ✏️         ║");
                 Console.WriteLine("  ║       0️⃣  Return to Main Menu     ↩️         ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -55,6 +57,13 @@ namespace InventoryManagement.Application.UI
                     case "3":
                         RegisterPurchase().Wait();
                         break;
+                    case "4":
+                        DeletePurchase().Wait();
+                        break;
+                    case "5":
+                        UpdatePurchase().Wait();
+                        break;
+
                     case "0":
                         returnTo = true;
                         break;
@@ -309,6 +318,149 @@ namespace InventoryManagement.Application.UI
             }
 
             Console.ForegroundColor = ConsoleColor.White;
+            Console.Write("\nPress any key to continue...");
+            Console.ResetColor();
+            Console.ReadKey();
+        }
+
+
+        public async Task DeletePurchase()
+        {
+            Console.Clear();
+            MainMenu.ShowHeader("DELETE PURCHASE");
+
+            try
+            {
+                int id = MainMenu.ReadInteger("\nEnter the purchase ID to delete: ");
+                var purchase = await _purchaseRepository.GetByIdAsync(id);
+
+                if (purchase == null)
+                {
+                    MainMenu.ShowMessage("\n❌ The purchase does not exist.", ConsoleColor.Red);
+                }
+                else 
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"\nPurchase Information:");
+                    Console.WriteLine($"ID: {purchase.Id}");
+                    Console.WriteLine($"Date: {purchase.Date}");
+                    Console.WriteLine($"Employee ID: {purchase.EmployeePersonId}");
+                    Console.WriteLine($"Order: {purchase.PurOrder}");
+                    Console.WriteLine($"Total: {purchase.Total}");
+                    Console.ResetColor();
+                    
+                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this purchase? (Y/N): ");
+                    
+                    if (confirm.ToUpper() == "Y")
+                    {
+                        bool result = await _purchaseRepository.DeleteAsync(id);
+                        
+                        if (result)
+                        {
+                            MainMenu.ShowMessage("\n✅ Purchase deleted successfully.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            MainMenu.ShowMessage("\n❌ Failed to delete the purchase.", ConsoleColor.Red);
+                        }
+                    }
+                    else
+                    {
+                        MainMenu.ShowMessage("\n⚠️ Operation cancelled.", ConsoleColor.Yellow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MainMenu.ShowMessage($"\n❌ Error deleting the purchase: {ex.Message}", ConsoleColor.Red);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("\nPress any key to continue...");
+            Console.ResetColor();
+            Console.ReadKey();
+        }
+
+        private async Task UpdatePurchase()
+        {
+            Console.Clear();
+            MainMenu.ShowHeader("UPDATE SALE");
+
+            try
+            {
+                int id = MainMenu.ReadInteger("\nEnter sale ID to update: ");
+                var purchase = await _purchaseRepository.GetByIdAsync(id);
+
+                if (purchase == null)
+                {
+                    MainMenu.ShowMessage("\n❌ The purchase doesn't exist", ConsoleColor.Red);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"\nCurrent Information:");
+                    Console.WriteLine($"ID: {purchase.Id}");
+                    Console.WriteLine($"Date: {purchase.Date:dd/MM/yyyy}");
+                    Console.WriteLine($"Employee ID: {purchase.EmployeePersonId}");
+                    Console.WriteLine($"Supplier ID: {purchase.SupplierPersonId}");
+                    Console.WriteLine($"Customer ID: {purchase.PurOrder}");
+                    Console.ResetColor();
+
+                    DateTime date = MainMenu.ReadDate($"\nNew Date (DD/MM/YYYY) [{purchase.Date:dd/MM/yyyy}]: ");
+                    if (date != purchase.Date)
+                    {
+                        if (date > DateTime.Now)
+                        {
+                            MainMenu.ShowMessage("Date cannot be in the future.", ConsoleColor.Red);
+                            return;
+                        }
+                        purchase.Date = date;
+                    }
+
+                    string employeeId = MainMenu.ReadText($"Enter Employee ID ({purchase.EmployeePersonId}): ");
+                    if (!string.IsNullOrWhiteSpace(employeeId))
+                    {
+                        purchase.EmployeePersonId = employeeId;
+                    }
+
+                    string supplierId = MainMenu.ReadText($"Enter Supplier ID ({purchase.SupplierPersonId}): ");
+                    if (!string.IsNullOrWhiteSpace(supplierId))
+                    {
+                        purchase.SupplierPersonId = supplierId;
+                    }
+
+                    string purOrder = MainMenu.ReadText($"Enter Order ({purchase.PurOrder}): ");
+                    if (!string.IsNullOrWhiteSpace(purOrder))
+                    {
+                        purchase.PurOrder = purOrder;
+                    }
+
+                    string confirm = MainMenu.ReadText("\nDo you want to save these changes? (Y/N): ");
+                    if (confirm.ToUpper() == "Y")
+                    {
+                        bool result = await _purchaseRepository.UpdateAsync(purchase);
+                        
+                        if (result)
+                        {
+                            MainMenu.ShowMessage("\n✅ Purchase dated successfully.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            MainMenu.ShowMessage("\n❌ Failed to update the purchase.", ConsoleColor.Red);
+                        }
+                    }
+                    else
+                    {
+                        MainMenu.ShowMessage("\n⚠️ Update cancelled.", ConsoleColor.Yellow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MainMenu.ShowMessage($"\n❌ Error updating the sale: {ex.Message}", ConsoleColor.Red);
+            }
+
+             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("\nPress any key to continue...");
             Console.ResetColor();
             Console.ReadKey();

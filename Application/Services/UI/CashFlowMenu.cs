@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using InventoryManagement.Domain.Entities;
 using InventoryManagement.Infrastructure.Repositories;
 using MySql.Data.MySqlClient;
+using Mysqlx.Crud;
+
 
 namespace InventoryManagement.Application.UI
 {
@@ -35,6 +37,8 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║     1️⃣  List Cash Flow           📋         ║");
                 Console.WriteLine("  ║     2️⃣  Show Cash Flow Details   🔍         ║");
                 Console.WriteLine("  ║     3️⃣  Register New Cash Flow   ➕         ║");
+                Console.WriteLine("  ║     4️⃣  Delete Cash Flow         ❌         ║");
+                Console.WriteLine("  ║     5️⃣  Update Cash Flow         ✏️          ║");
                 Console.WriteLine("  ║     0️⃣  Return to Main Menu      ↩️          ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -53,6 +57,13 @@ namespace InventoryManagement.Application.UI
                     case "3":
                         RegisterCashFlow().Wait();
                         break;
+                    case "4":
+                        DeleteCashFlow().Wait();
+                        break;
+                    case "5":
+                        UpdateCashFlow().Wait();
+                        break;
+
                     case "0":
                         returnTo = true;
                         break;
@@ -183,6 +194,175 @@ namespace InventoryManagement.Application.UI
             }
             
             Console.Write("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
+        
+        private async Task DeleteCashFlow()
+        {
+            Console.Clear();
+            MainMenu.ShowHeader("DELETE CASH FLOW");
+
+            try
+            {
+                int id = MainMenu.ReadInteger("\nEnter the cash flow ID to delete: ");
+                var cashFlow = await _cashFlowRepository.GetByIdAsync(id);
+
+                if (cashFlow == null)
+                {
+                    MainMenu.ShowMessage("\n❌ The cash flow does not exist.", ConsoleColor.Red);
+                }
+                else 
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"\nCash Flow Information:");
+                    Console.WriteLine($"ID: {cashFlow.Id}");
+                    Console.WriteLine($"Date: {cashFlow.Date}");
+                    Console.WriteLine($"Cost: {cashFlow.Cost}");
+                    Console.WriteLine($"Concept: {cashFlow.Concept}");
+                    Console.ResetColor();
+                    
+                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this cash flow? (Y/N): ");
+                    
+                    if (confirm.ToUpper() == "Y")
+                    {
+                        bool result = await _cashFlowRepository.DeleteAsync(id);
+                        
+                        if (result)
+                        {
+                            MainMenu.ShowMessage("\n✅ Cash flow deleted successfully.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            MainMenu.ShowMessage("\n❌ Failed to delete the cash flow.", ConsoleColor.Red);
+                        }
+                    }
+                    else
+                    {
+                        MainMenu.ShowMessage("\n⚠️ Operation cancelled.", ConsoleColor.Yellow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MainMenu.ShowMessage($"\n❌ Error deleting the cash flow: {ex.Message}", ConsoleColor.Red);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("\nPress any key to continue...");
+            Console.ResetColor();
+            Console.ReadKey();
+        }
+
+        private async Task UpdateCashFlow()
+        {
+            Console.Clear();
+            MainMenu.ShowHeader("UPDATE CASH FLOW");
+
+            try
+            {
+                int id = MainMenu.ReadInteger("\nEnter cash flow ID to update: ");
+                var cashFlow = await _cashFlowRepository.GetByIdAsync(id);
+
+                if (cashFlow == null)
+                {
+                    MainMenu.ShowMessage("\n❌ The cash flow doesn't exist", ConsoleColor.Red);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"\nCurrent Information:");
+                    Console.WriteLine($"ID: {cashFlow.Id}");
+                    Console.WriteLine($"Birthdate: {cashFlow.Date:dd/MM/yyyy}");
+                    Console.WriteLine($"Cost: {cashFlow.Cost}");
+                    Console.WriteLine($"Concept: {cashFlow.Concept}");
+                    Console.ResetColor();
+
+                    // Update Date
+                    DateTime date = MainMenu.ReadDate($"\nNew Date (DD/MM/YYYY) [{cashFlow.Date:dd/MM/yyyy}]: ");
+                    if (date != cashFlow.Date)
+                    {
+                        if (date > DateTime.Now)
+                        {
+                            MainMenu.ShowMessage("Date cannot be in the future.", ConsoleColor.Red);
+                            return;
+                        }
+                        cashFlow.Date = date;
+                    }
+
+                    int movementId = MainMenu.ReadInteger($"\nMovement Type [{cashFlow.MovementTypeId}]: ");
+                    if (movementId != cashFlow.MovementTypeId)
+                    {
+                        if (movementId <= 0)
+                        {
+                            MainMenu.ShowMessage("Movement type ID must be greater than zero.", ConsoleColor.Red);
+                            return;
+                        }
+                        cashFlow.MovementTypeId = movementId;
+                    }
+
+                    decimal cost = MainMenu.ReadPositiveDecimal($"\nNew Cost[{cashFlow.Cost:C}]: ");
+                    if (cost != cashFlow.Cost)
+                    {
+                        if (cost <= 0)
+                        {
+                            MainMenu.ShowMessage("Cost must be greater than zero.", ConsoleColor.Red);
+                            return;
+                        }
+                        cashFlow.Cost = cost;
+                    }
+
+                    string concepto = MainMenu.ReadText($"Enter new concept cash flow ({cashFlow.Concept}): ");
+                    if (!string.IsNullOrWhiteSpace(concepto))
+                    {
+                        cashFlow.Concept = concepto;
+                    }
+
+                    string personId = MainMenu.ReadText($"\nPerson ID [{cashFlow.PersonId}]: ");
+                    if (!string.IsNullOrWhiteSpace(personId))
+                    {
+                        cashFlow.PersonId = personId;
+                    }
+
+                    Console.Clear();
+                    MainMenu.ShowHeader("UPDATED CASH FLOW INFORMATION");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"ID: {cashFlow.Id}");
+                    Console.WriteLine($"\nDate: {cashFlow.Date:dd/MM/yyyy}");
+                    Console.WriteLine($"Movement type ID: {cashFlow.MovementTypeId}");
+                    Console.WriteLine($"Cost: {cashFlow.Cost:C}");
+                    Console.WriteLine($"Concept: {cashFlow.Concept}");
+                    Console.WriteLine($"Person ID: {cashFlow.PersonId}");
+                    Console.ResetColor();
+
+                    string confirm = MainMenu.ReadText("\nDo you want to save these changes? (Y/N): ");
+                    if (confirm.ToUpper() == "Y")
+                    {
+                        bool result = await _cashFlowRepository.UpdateAsync(cashFlow);
+                        
+                        if (result)
+                        {
+                            MainMenu.ShowMessage("\n✅ Cash Flow updated successfully.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            MainMenu.ShowMessage("\n❌ Failed to update the cashFlow.", ConsoleColor.Red);
+                        }
+                    }
+                    else
+                    {
+                        MainMenu.ShowMessage("\n⚠️ Update cancelled.", ConsoleColor.Yellow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MainMenu.ShowMessage($"\n❌ Error updating the cash flow: {ex.Message}", ConsoleColor.Red);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("\nPress any key to continue...");
+            Console.ResetColor();
             Console.ReadKey();
         }
     }

@@ -39,6 +39,8 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║       1️⃣  List Sales              📋        ║");
                 Console.WriteLine("  ║       2️⃣  Show Sale Details       🔍        ║");
                 Console.WriteLine("  ║       3️⃣  Register New Sale       ➕        ║");
+                Console.WriteLine("  ║       4️⃣  Delete Sale             ❌        ║");
+                Console.WriteLine("  ║       5️⃣  Update Sale             ✏️         ║");
                 Console.WriteLine("  ║       0️⃣  Return to Main Menu     ↩️         ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -57,6 +59,13 @@ namespace InventoryManagement.Application.UI
                     case "3":
                         RegisterSale().Wait();
                         break;
+                    case "4":
+                        DeleteSale().Wait();
+                        break;
+                    case "5":
+                        UpdateSale().Wait();
+                        break;
+
                     case "0":
                         returnTo = true;
                         break;
@@ -285,6 +294,142 @@ namespace InventoryManagement.Application.UI
             }
             
             Console.Write("\nPress any key to continue...");
+            Console.ReadKey();
+        }
+
+
+        private async Task DeleteSale()
+        {
+            Console.Clear();
+            MainMenu.ShowHeader("DELETE SALE");
+
+            try
+            {
+                int id = MainMenu.ReadInteger("\nEnter the sale ID to delete: ");
+                var sale = await _saleRepository.GetByIdAsync(id);
+
+                if (sale == null)
+                {
+                    MainMenu.ShowMessage("\n❌ The sale does not exist.", ConsoleColor.Red);
+                }
+                else 
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"\nSale Information:");
+                    Console.WriteLine($"ID: {sale.InvoiceId}");
+                    Console.WriteLine($"Date: {sale.Date}");
+                    Console.WriteLine($"Employee ID: {sale.EmployeePersonId}");
+                    Console.WriteLine($"Customer ID: {sale.CustomerPersonId}");
+                    Console.WriteLine($"Total: {sale.Total}");
+                    Console.ResetColor();
+                    
+                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this sale? (Y/N): ");
+                    
+                    if (confirm.ToUpper() == "Y")
+                    {
+                        bool result = await _saleRepository.DeleteAsync(id);
+                        
+                        if (result)
+                        {
+                            MainMenu.ShowMessage("\n✅ Sale deleted successfully.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            MainMenu.ShowMessage("\n❌ Failed to delete the sale.", ConsoleColor.Red);
+                        }
+                    }
+                    else
+                    {
+                        MainMenu.ShowMessage("\n⚠️ Operation cancelled.", ConsoleColor.Yellow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MainMenu.ShowMessage($"\n❌ Error deleting the sale: {ex.Message}", ConsoleColor.Red);
+            }
+
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("\nPress any key to continue...");
+            Console.ResetColor();
+            Console.ReadKey();
+        }
+
+        private async Task UpdateSale()
+        {
+            Console.Clear();
+            MainMenu.ShowHeader("UPDATE SALE");
+
+            try
+            {
+                int id = MainMenu.ReadInteger("\nEnter sale ID to update: ");
+                var sale = await _saleRepository.GetByIdAsync(id);
+
+                if (sale == null)
+                {
+                    MainMenu.ShowMessage("\n❌ The sale doesn't exist", ConsoleColor.Red);
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine($"\nCurrent Information:");
+                    Console.WriteLine($"ID: {sale.InvoiceId}");
+                    Console.WriteLine($"Date: {sale.Date:dd/MM/yyyy}");
+                    Console.WriteLine($"Employee ID: {sale.EmployeePersonId}");
+                    Console.WriteLine($"Customer ID: {sale.CustomerPersonId}");
+                    Console.ResetColor();
+
+                    DateTime date = MainMenu.ReadDate($"\nNew Date (DD/MM/YYYY) [{sale.Date:dd/MM/yyyy}]: ");
+                    if (date != sale.Date)
+                    {
+                        if (date > DateTime.Now)
+                        {
+                            MainMenu.ShowMessage("Date cannot be in the future.", ConsoleColor.Red);
+                            return;
+                        }
+                        sale.Date = date;
+                    }
+
+                    string employeeId = MainMenu.ReadText($"Enter Employee ID ({sale.EmployeePersonId}): ");
+                    if (!string.IsNullOrWhiteSpace(employeeId))
+                    {
+                        sale.EmployeePersonId = employeeId;
+                    }
+
+                    string customerId = MainMenu.ReadText($"Enter Customer ID ({sale.CustomerPersonId}): ");
+                    if (!string.IsNullOrWhiteSpace(customerId))
+                    {
+                        sale.CustomerPersonId = customerId;
+                    }
+
+                    string confirm = MainMenu.ReadText("\nDo you want to save these changes? (Y/N): ");
+                    if (confirm.ToUpper() == "Y")
+                    {
+                        bool result = await _saleRepository.UpdateAsync(sale);
+                        
+                        if (result)
+                        {
+                            MainMenu.ShowMessage("\n✅ Sale updated successfully.", ConsoleColor.Green);
+                        }
+                        else
+                        {
+                            MainMenu.ShowMessage("\n❌ Failed to update the sale.", ConsoleColor.Red);
+                        }
+                    }
+                    else
+                    {
+                        MainMenu.ShowMessage("\n⚠️ Update cancelled.", ConsoleColor.Yellow);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MainMenu.ShowMessage($"\n❌ Error updating the sale: {ex.Message}", ConsoleColor.Red);
+            }
+
+             Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("\nPress any key to continue...");
+            Console.ResetColor();
             Console.ReadKey();
         }
     }

@@ -176,8 +176,101 @@ namespace InventoryManagement.Infrastructure.Repositories
             }
         }
 
-        public async Task<bool> UpdateAsync(Sale sale) => await Task.FromResult(false);
-        public async Task<bool> DeleteAsync(object id) => await Task.FromResult(false);
+                public async Task<bool> UpdateAsync(Sale sale)
+        {
+            if (sale == null)
+                throw new ArgumentNullException(nameof(sale));
+
+            if (string.IsNullOrEmpty(sale.InvoiceId.ToString()))
+                throw new ArgumentException("Invoice ID cannot be empty", nameof(sale.InvoiceId));
+
+            if (string.IsNullOrEmpty(sale.EmployeePersonId))
+                throw new ArgumentException("Employee ID cannot be empty", nameof(sale.EmployeePersonId));
+
+            if (string.IsNullOrEmpty(sale.CustomerPersonId))
+                throw new ArgumentException("Customer ID cannot be empty", nameof(sale.CustomerPersonId));
+
+            if (sale.Date == default)
+                throw new ArgumentException("Sale date cannot be empty", nameof(sale.Date));
+
+            using var transaction = await _connection.BeginTransactionAsync();
+            try
+            {
+                // Update the sale header
+                using var commandSale = new MySqlCommand(
+                    @"UPDATE venta 
+                      SET fecha = @Fecha, 
+                          terceroEmpleado_id = @TerceroEmpleadoId, 
+                          terceroCliente_id = @TerceroClienteId
+                      WHERE factura_id = @Id",
+                    _connection,
+                    transaction);
+
+                commandSale.Parameters.AddWithValue("@Id", sale.InvoiceId);
+                commandSale.Parameters.AddWithValue("@Fecha", sale.Date);
+                commandSale.Parameters.AddWithValue("@TerceroEmpleadoId", sale.EmployeePersonId);
+                commandSale.Parameters.AddWithValue("@TerceroClienteId", sale.CustomerPersonId);
+
+                var result = await commandSale.ExecuteNonQueryAsync() > 0;
+
+                if (!result)
+                {
+                    await transaction.RollbackAsync();
+                    return false;
+                }
+
+                // Delete existing details
+                using var commandDeleteDetails = new MySqlCommand(
+                    "DELETE FROM detalle_venta WHERE factura_id = @Id",
+                    _connection,
+                    transaction);
+
+                commandDeleteDetails.Parameters.AddWithValue("@Id", sale.InvoiceId);
+                await commandDeleteDetails.ExecuteNonQueryAsync();
+
+                // Insert new details if they exist
+                if (sale.Details != null && sale.Details.Any())
+                {
+                    foreach (var detail in sale.Details)
+                    {
+                        using var commandDetail = new MySqlCommand(
+                            @"INSERT INTO detalle_venta 
+                              (factura_id, producto_id, cantidad, valor) 
+                              VALUES (@FacturaId, @ProductoId, @Cantidad, @Valor)",
+                            _connection,
+                            transaction);
+
+                        commandDetail.Parameters.AddWithValue("@FacturaId", sale.InvoiceId);
+                        commandDetail.Parameters.AddWithValue("@ProductoId", detail.ProductId);
+                        commandDetail.Parameters.AddWithValue("@Cantidad", detail.Quantity);
+                        commandDetail.Parameters.AddWithValue("@Valor", detail.Cost);
+
+                        await commandDetail.ExecuteNonQueryAsync();
+
+                        // Update product stock
+                        await _productRepository.ActualizarStockAsync(detail.ProductId, -detail.Quantity, _connection);
+                    }
+                }
+
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+        public async Task<bool> DeleteAsync(object id)
+        {
+            using var command = new MySqlCommand(
+                "DELETE FROM venta WHERE factura_id = @Id",
+                _connection);
+
+            command.Parameters.AddWithValue("@Id", id);
+
+            return await command.ExecuteNonQueryAsync() > 0;
+        }
 
         private async Task<IEnumerable<SaleDetail>> GetDetallesVentaAsync(int invoiceId)
         {
