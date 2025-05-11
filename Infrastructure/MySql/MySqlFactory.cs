@@ -87,5 +87,11 @@ public class MySqlDbFactory : IDbFactory
         return new PersonRepository(connection);
     }
 
+    public IPersonTelephoneRepository CreatePersonTelephoneRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new PersonTelephoneRepository(connection);
+    }
+
 
 }

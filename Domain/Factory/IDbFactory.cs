@@ -17,6 +17,6 @@ public interface IDbFactory
     IRegionRepository CreateRegionRepository();
     ICityRepository CreateCityRepository();
     IPersonRepository CreatePersonRepository();
-
+    IPersonTelephoneRepository CreatePersonTelephoneRepository();
 
 }
