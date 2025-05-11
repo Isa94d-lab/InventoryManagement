@@ -18,5 +18,7 @@ public interface IDbFactory
     ICityRepository CreateCityRepository();
     IPersonRepository CreatePersonRepository();
     IPersonTelephoneRepository CreatePersonTelephoneRepository();
+    IEpsRepository CreateEpsRepository();
+    IArlRepository CreateArlRepository();
 
 }
