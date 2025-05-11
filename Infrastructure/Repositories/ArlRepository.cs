@@ -122,6 +122,7 @@ namespace InventoryManagement.Infrastructure.Repositories
             {
                 await transaction.RollbackAsync();
                 throw;
+                // commit
             }
         }
     }
