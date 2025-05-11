@@ -81,5 +81,11 @@ public class MySqlDbFactory : IDbFactory
         return new CityRepository(connection);
     }
 
+    public IPersonRepository CreatePersonRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new PersonRepository(connection);
+    }
+
 
 }
