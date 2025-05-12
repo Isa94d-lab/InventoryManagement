@@ -1,4 +1,3 @@
-
 CREATE DATABASE sistemainventario;
 USE sistemainventario;
 
@@ -197,4 +196,16 @@ CREATE TABLE IF NOT EXISTS producto_proveedor (
     PRIMARY KEY (tercero_id, producto_id),
     CONSTRAINT producto_proveedor_FK FOREIGN KEY (tercero_id) REFERENCES tercero(id) ON DELETE CASCADE ON UPDATE CASCADE, 
     CONSTRAINT proveedor_producto_FK FOREIGN KEY (producto_id) REFERENCES producto(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS usuario (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    tercero_id VARCHAR(20),
+    username VARCHAR(50) UNIQUE,
+    password VARCHAR(100),
+    rol ENUM('Admin', 'Empleado', 'Supervisor'),
+    fecha_creacion DATE,
+    ultimo_acceso DATETIME,
+    activo BOOLEAN DEFAULT true,
+    CONSTRAINT tercero_usuario_FK FOREIGN KEY (tercero_id) REFERENCES tercero(id) ON DELETE CASCADE ON UPDATE CASCADE
 );

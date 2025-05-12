@@ -8,12 +8,12 @@ using MySql.Data.MySqlClient;
 
 namespace InventoryManagement.Application.UI
 {
-    public class CountryMenu
+    public class EpsMenu
     {
-        private readonly CountryRepository _countryRepository;
-        public CountryMenu(MySqlConnection connection)
+        private readonly EpsRepository _epsRepository;
+        public EpsMenu(MySqlConnection connection)
         {
-            _countryRepository = new CountryRepository(connection);
+            _epsRepository = new EpsRepository(connection);
         }
 
         public void ShowMenu()
@@ -24,18 +24,18 @@ namespace InventoryManagement.Application.UI
             while (!returnTo)
             {
                 Console.Clear();
-                MainMenu.ShowHeader(" 🌎 COUNTRY MENU   ");
+                MainMenu.ShowHeader("  🪪  EPS MENU   ");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("  ╔════════════════════════════════════════════╗");
-                Console.WriteLine("  ║               🌎 COUNTRY MENU              ║");
+                Console.WriteLine("  ║                 🪪  EPS MENU                ║");
                 Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("  ║       1️⃣  List Countries           📋       ║");
-                Console.WriteLine("  ║       2️⃣  Create Country          ➕        ║");
-                Console.WriteLine("  ║       3️⃣  Update Country          ✏️         ║");
-                Console.WriteLine("  ║       4️⃣  Delete Country          ✖️         ║");
+                Console.WriteLine("  ║       1️⃣  List EPS           📋             ║");
+                Console.WriteLine("  ║       2️⃣  Create EPS          ➕            ║");
+                Console.WriteLine("  ║       3️⃣  Update EPS          ✏️             ║");
+                Console.WriteLine("  ║       4️⃣  Delete EPS          ✖️             ║");
                 Console.WriteLine("  ║       0️⃣  Return to Location Menu     ↩️     ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -46,16 +46,16 @@ namespace InventoryManagement.Application.UI
                 switch (option)
                 {
                     case "1":
-                        ListCountries().Wait();
+                        ListEps().Wait();
                         break;
                     case "2":
-                        CreateCountry().Wait();
+                        CreateEps().Wait();
                         break;
                     case "3":
-                        UpdateCountry().Wait();
+                        UpdateEps().Wait();
                         break;
                     case "4":
-                        DeleteCountry().Wait();
+                        DeleteEps().Wait();
                         break;
                     case "0":
                         returnTo = true;
@@ -67,21 +67,21 @@ namespace InventoryManagement.Application.UI
                 }
             }
 
-            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);  
+            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);
         }
 
-        private async Task ListCountries()
+        private async Task ListEps()
         {
             Console.Clear();
-            MainMenu.ShowHeader("COUNTRIES LIST");
+            MainMenu.ShowHeader("ARL LIST");
 
             try
             {
-                var countries = await _countryRepository.GetAllAsync();
+                var eps = await _epsRepository.GetAllAsync();
 
-                if (!countries.Any())
+                if (!eps.Any())
                 {
-                    MainMenu.ShowMessage("\nNo countries registered.", ConsoleColor.Yellow);
+                    MainMenu.ShowMessage("\nNo EPS registered.", ConsoleColor.Yellow);
                 }
                 else
                 {
@@ -93,12 +93,12 @@ namespace InventoryManagement.Application.UI
                     Console.WriteLine(new string('-', 95));
                     Console.ResetColor();
 
-                    foreach (var country in countries)
+                    foreach (var e in eps)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("{0,-5} {1,-12}",
-                            country.Id,
-                            country.Name);
+                            e.Id,
+                            e.Name);
                     }
 
                     Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -108,7 +108,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error listing countries: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error listing EPS: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -117,44 +117,43 @@ namespace InventoryManagement.Application.UI
             Console.ReadKey();
         }
 
-        private async Task CreateCountry()
+        private async Task CreateEps()
         {
             Console.Clear();
-            MainMenu.ShowHeader("REGISTER NEW COUNTRY");
+            MainMenu.ShowHeader("REGISTER NEW EPS");
 
             try
             {
-                string nameCountry = MainMenu.ReadText("\nName Country: ").Trim();
-                if (string.IsNullOrEmpty(nameCountry))
+                string nameEps = MainMenu.ReadText("\nName EPS: ").Trim();
+                if (string.IsNullOrEmpty(nameEps))
                 {
-                    MainMenu.ShowMessage("Name Country cannot be empty.", ConsoleColor.Red);
+                    MainMenu.ShowMessage("Name EPS cannot be empty.", ConsoleColor.Red);
                     return;
                 }
 
-                var country = new Country
+                var e = new Eps
                 {
-                    Name = nameCountry
+                    Name = nameEps
                 };
 
                 Console.Clear();
-                MainMenu.ShowHeader("COUNTRY INFORMATION");
+                MainMenu.ShowHeader("EPS INFORMATION");
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"\nCountry ID: {country.Id}");
-                Console.WriteLine($"Name: {nameCountry}");
+                Console.WriteLine($"Name: {nameEps}");
 
-                string confirm = MainMenu.ReadText("\nDo you want to register this country? (Y/N): ");
+                string confirm = MainMenu.ReadText("\nDo you want to register this EPS? (Y/N): ");
                 if (confirm.ToUpper() == "Y")
                 {
-                    bool result = await _countryRepository.InsertAsync(country);
+                    bool result = await _epsRepository.InsertAsync(e);
 
                     if (result)
                     {
-                        MainMenu.ShowMessage("\n✅ Country registered successfully.", ConsoleColor.Green);
+                        MainMenu.ShowMessage("\n✅ EPS registered successfully.", ConsoleColor.Green);
                     }
                     else
                     {
-                        MainMenu.ShowMessage("\n❌ Country registration failed.", ConsoleColor.Red);
+                        MainMenu.ShowMessage("\n❌ EPS registration failed.", ConsoleColor.Red);
                     }
                 }
                 else
@@ -164,7 +163,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error registering country: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error registering EPS: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -173,53 +172,53 @@ namespace InventoryManagement.Application.UI
             Console.ReadKey();
         }
 
-        private async Task UpdateCountry()
+        private async Task UpdateEps()
         {
             Console.Clear();
-            MainMenu.ShowHeader("UPDATE COUNTRY");
+            MainMenu.ShowHeader("UPDATE EPS");
             
             try
             {
-                int id = MainMenu.ReadInteger("\nEnter country ID to update: ");
-                var country = await _countryRepository.GetByIdAsync(id);
+                int id = MainMenu.ReadInteger("\nEnter EPS ID to update: ");
+                var e = await _epsRepository.GetByIdAsync(id);
 
-                if (country == null)
+                if (e == null)
                 {
-                    MainMenu.ShowMessage("\n❌ The country doesn't exist", ConsoleColor.Red);
+                    MainMenu.ShowMessage("\n❌ The EPS doesn't exist", ConsoleColor.Red);
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine($"\nCurrent Information:");
-                    Console.WriteLine($"Country ID: {country.Id}");
-                    Console.WriteLine($"Name: {country.Name}");
+                    Console.WriteLine($"EPS ID: {e.Id}");
+                    Console.WriteLine($"Name: {e.Name}");
                     Console.ResetColor();
                     
-                    string nombre = MainMenu.ReadText($"Enter new name country ({country.Name}): ");
+                    string nombre = MainMenu.ReadText($"Enter new name EPS ({e.Name}): ");
                     if (!string.IsNullOrWhiteSpace(nombre))
                     {
-                        country.Name = nombre;
+                        e.Name = nombre;
                     }
 
                     Console.Clear();
-                    MainMenu.ShowHeader("UPDATED COUNTRY INFORMATION");
+                    MainMenu.ShowHeader("UPDATED EPS INFORMATION");
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"Country ID: {country.Id}");
-                    Console.WriteLine($"Name: {country.Name}");
+                    Console.WriteLine($"EPS ID: {e.Id}");
+                    Console.WriteLine($"Name: {e.Name}");
                     Console.ResetColor();
 
                     string confirm = MainMenu.ReadText("\nDo you want to save these changes? (Y/N): ");
                     if (confirm.ToUpper() == "Y")
                     {
-                        bool result = await _countryRepository.UpdateAsync(country);
+                        bool result = await _epsRepository.UpdateAsync(e);
                         
                         if (result)
                         {
-                            MainMenu.ShowMessage("\n✅ Country updated successfully.", ConsoleColor.Green);
+                            MainMenu.ShowMessage("\n✅ EPS updated successfully.", ConsoleColor.Green);
                         }
                         else
                         {
-                            MainMenu.ShowMessage("\n❌ Failed to update the country.", ConsoleColor.Red);
+                            MainMenu.ShowMessage("\n❌ Failed to update the EPS.", ConsoleColor.Red);
                         }
                     }
                     else
@@ -230,7 +229,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error updating the country: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error updating the EPS: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -239,41 +238,41 @@ namespace InventoryManagement.Application.UI
             Console.ReadKey();
         }
 
-        private async Task DeleteCountry()
+        private async Task DeleteEps()
         {
             Console.Clear();
-            MainMenu.ShowHeader("DELETE COUNTRY");
+            MainMenu.ShowHeader("DELETE EPS");
             
             try
             {
-                int id = MainMenu.ReadInteger("\nEnter the country ID to delete: ");
-                var country = await _countryRepository.GetByIdAsync(id);
+                int id = MainMenu.ReadInteger("\nEnter the EPS ID to delete: ");
+                var e = await _epsRepository.GetByIdAsync(id);
 
-                if (country == null)
+                if (e == null)
                 {
-                    MainMenu.ShowMessage("\n❌ The country does not exist.", ConsoleColor.Red);
+                    MainMenu.ShowMessage("\n❌ The EPS does not exist.", ConsoleColor.Red);
                 }
                 else 
                 {
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"\nCountry Information:");
-                    Console.WriteLine($"ID: {country.Id}");
-                    Console.WriteLine($"Name: {country.Name}");
+                    Console.WriteLine($"\nEPS Information:");
+                    Console.WriteLine($"ID: {e.Id}");
+                    Console.WriteLine($"Name: {e.Name}");
                     Console.ResetColor();
                     
-                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this country? (Y/N): ");
+                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this EPS? (Y/N): ");
                     
                     if (confirm.ToUpper() == "Y")
                     {
-                        bool result = await _countryRepository.DeleteAsync(id);
+                        bool result = await _epsRepository.DeleteAsync(id);
                         
                         if (result)
                         {
-                            MainMenu.ShowMessage("\n✅ Country deleted successfully.", ConsoleColor.Green);
+                            MainMenu.ShowMessage("\n✅ EPS deleted successfully.", ConsoleColor.Green);
                         }
                         else
                         {
-                            MainMenu.ShowMessage("\n❌ Failed to delete the country.", ConsoleColor.Red);
+                            MainMenu.ShowMessage("\n❌ Failed to delete the EPS.", ConsoleColor.Red);
                         }
                     }
                     else
@@ -284,7 +283,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error deleting the country: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error deleting the EPS: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
