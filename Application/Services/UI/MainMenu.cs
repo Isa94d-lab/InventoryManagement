@@ -15,8 +15,9 @@ namespace InventoryManagement.Application.UI
         private readonly PurchaseMenu _purchaseMenu;
         private readonly CashFlowMenu _cashFlowMenu;
         private readonly PlanMenu _planMenu;
-        private readonly PersonMenu _personMenu;
+        private readonly UserMenu _userMenu;
         private readonly LocationMenu _locationMenu;
+        private readonly SocialSecurityMenu _socialsecurityMenu;
         
         public MainMenu()
         {
@@ -29,8 +30,9 @@ namespace InventoryManagement.Application.UI
             _purchaseMenu = new PurchaseMenu(connection);
             _cashFlowMenu = new CashFlowMenu(connection);
             _planMenu = new PlanMenu(connection);
-            _personMenu = new PersonMenu();
+            _userMenu = new UserMenu();
             _locationMenu = new LocationMenu();
+            _socialsecurityMenu = new SocialSecurityMenu();
         }
 
         public void ShowMenu()
@@ -55,8 +57,9 @@ namespace InventoryManagement.Application.UI
                 Console.WriteLine("  ║     3️⃣  Purchases Management   📥           ║");
                 Console.WriteLine("  ║     4️⃣  Cash Flow              💵           ║");
                 Console.WriteLine("  ║     5️⃣  Promotional Plans      🎁           ║");
-                Console.WriteLine("  ║     6️⃣  Person                 👤           ║");
+                Console.WriteLine("  ║     6️⃣  Users                  👤           ║");
                 Console.WriteLine("  ║     7️⃣  Location               📍           ║");
+                Console.WriteLine("  ║     8️⃣  Social Security        🪪            ║");
                 Console.WriteLine("  ║     0️⃣  Exit                   ❌           ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -82,10 +85,13 @@ namespace InventoryManagement.Application.UI
                         _planMenu.ShowMenu();
                         break;
                     case "6":
-                        _personMenu.ShowMenu();
+                        _userMenu.ShowMenu();
                         break;
                     case "7":
                         _locationMenu.ShowMenu();
+                        break;
+                    case "8":
+                        _socialsecurityMenu.ShowMenu();
                         break;   
                     case "0":
                         exit = true;

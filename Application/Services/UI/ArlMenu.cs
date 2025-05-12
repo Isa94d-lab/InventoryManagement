@@ -8,12 +8,12 @@ using MySql.Data.MySqlClient;
 
 namespace InventoryManagement.Application.UI
 {
-    public class CountryMenu
+    public class ArlMenu
     {
-        private readonly CountryRepository _countryRepository;
-        public CountryMenu(MySqlConnection connection)
+        private readonly ArlRepository _arlRepository;
+        public ArlMenu(MySqlConnection connection)
         {
-            _countryRepository = new CountryRepository(connection);
+            _arlRepository = new ArlRepository(connection);
         }
 
         public void ShowMenu()
@@ -24,18 +24,18 @@ namespace InventoryManagement.Application.UI
             while (!returnTo)
             {
                 Console.Clear();
-                MainMenu.ShowHeader(" 🌎 COUNTRY MENU   ");
+                MainMenu.ShowHeader(" 🪪 ARL MENU   ");
 
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.WriteLine("  ╔════════════════════════════════════════════╗");
-                Console.WriteLine("  ║               🌎 COUNTRY MENU              ║");
+                Console.WriteLine("  ║                 🪪  ARL MENU                ║");
                 Console.WriteLine("  ╠════════════════════════════════════════════╣");
 
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("  ║       1️⃣  List Countries           📋       ║");
-                Console.WriteLine("  ║       2️⃣  Create Country          ➕        ║");
-                Console.WriteLine("  ║       3️⃣  Update Country          ✏️         ║");
-                Console.WriteLine("  ║       4️⃣  Delete Country          ✖️         ║");
+                Console.WriteLine("  ║       1️⃣  List ARL           📋             ║");
+                Console.WriteLine("  ║       2️⃣  Create ARL          ➕            ║");
+                Console.WriteLine("  ║       3️⃣  Update ARL          ✏️             ║");
+                Console.WriteLine("  ║       4️⃣  Delete ARL          ✖️             ║");
                 Console.WriteLine("  ║       0️⃣  Return to Location Menu     ↩️     ║");
                 Console.WriteLine("  ╚════════════════════════════════════════════╝");
 
@@ -46,16 +46,16 @@ namespace InventoryManagement.Application.UI
                 switch (option)
                 {
                     case "1":
-                        ListCountries().Wait();
+                        ListArl().Wait();
                         break;
                     case "2":
-                        CreateCountry().Wait();
+                        CreateArl().Wait();
                         break;
                     case "3":
-                        UpdateCountry().Wait();
+                        UpdateArl().Wait();
                         break;
                     case "4":
-                        DeleteCountry().Wait();
+                        DeleteArl().Wait();
                         break;
                     case "0":
                         returnTo = true;
@@ -67,21 +67,21 @@ namespace InventoryManagement.Application.UI
                 }
             }
 
-            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);  
+            MainMenu.ShowMessage("\n👋 Thank you for using the application! Have a great day! 🌟", ConsoleColor.Green);
         }
 
-        private async Task ListCountries()
+        private async Task ListArl()
         {
             Console.Clear();
-            MainMenu.ShowHeader("COUNTRIES LIST");
+            MainMenu.ShowHeader("ARL LIST");
 
             try
             {
-                var countries = await _countryRepository.GetAllAsync();
+                var arls = await _arlRepository.GetAllAsync();
 
-                if (!countries.Any())
+                if (!arls.Any())
                 {
-                    MainMenu.ShowMessage("\nNo countries registered.", ConsoleColor.Yellow);
+                    MainMenu.ShowMessage("\nNo arls registered.", ConsoleColor.Yellow);
                 }
                 else
                 {
@@ -93,12 +93,12 @@ namespace InventoryManagement.Application.UI
                     Console.WriteLine(new string('-', 95));
                     Console.ResetColor();
 
-                    foreach (var country in countries)
+                    foreach (var arl in arls)
                     {
                         Console.ForegroundColor = ConsoleColor.White;
                         Console.WriteLine("{0,-5} {1,-12}",
-                            country.Id,
-                            country.Name);
+                            arl.Id,
+                            arl.Name);
                     }
 
                     Console.ForegroundColor = ConsoleColor.DarkMagenta;
@@ -108,7 +108,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error listing countries: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error listing arl: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -117,44 +117,43 @@ namespace InventoryManagement.Application.UI
             Console.ReadKey();
         }
 
-        private async Task CreateCountry()
+        private async Task CreateArl()
         {
             Console.Clear();
-            MainMenu.ShowHeader("REGISTER NEW COUNTRY");
+            MainMenu.ShowHeader("REGISTER NEW ARL");
 
             try
             {
-                string nameCountry = MainMenu.ReadText("\nName Country: ").Trim();
-                if (string.IsNullOrEmpty(nameCountry))
+                string nameArl = MainMenu.ReadText("\nName ARL: ").Trim();
+                if (string.IsNullOrEmpty(nameArl))
                 {
-                    MainMenu.ShowMessage("Name Country cannot be empty.", ConsoleColor.Red);
+                    MainMenu.ShowMessage("Name ARL cannot be empty.", ConsoleColor.Red);
                     return;
                 }
 
-                var country = new Country
+                var arl = new Arl
                 {
-                    Name = nameCountry
+                    Name = nameArl
                 };
 
                 Console.Clear();
-                MainMenu.ShowHeader("COUNTRY INFORMATION");
+                MainMenu.ShowHeader("ARL INFORMATION");
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"\nCountry ID: {country.Id}");
-                Console.WriteLine($"Name: {nameCountry}");
+                Console.WriteLine($"Name: {nameArl}");
 
-                string confirm = MainMenu.ReadText("\nDo you want to register this country? (Y/N): ");
+                string confirm = MainMenu.ReadText("\nDo you want to register this ARL? (Y/N): ");
                 if (confirm.ToUpper() == "Y")
                 {
-                    bool result = await _countryRepository.InsertAsync(country);
+                    bool result = await _arlRepository.InsertAsync(arl);
 
                     if (result)
                     {
-                        MainMenu.ShowMessage("\n✅ Country registered successfully.", ConsoleColor.Green);
+                        MainMenu.ShowMessage("\n✅ ARL registered successfully.", ConsoleColor.Green);
                     }
                     else
                     {
-                        MainMenu.ShowMessage("\n❌ Country registration failed.", ConsoleColor.Red);
+                        MainMenu.ShowMessage("\n❌ ARL registration failed.", ConsoleColor.Red);
                     }
                 }
                 else
@@ -164,7 +163,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error registering country: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error registering ARL: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -173,53 +172,53 @@ namespace InventoryManagement.Application.UI
             Console.ReadKey();
         }
 
-        private async Task UpdateCountry()
+        private async Task UpdateArl()
         {
             Console.Clear();
-            MainMenu.ShowHeader("UPDATE COUNTRY");
+            MainMenu.ShowHeader("UPDATE ARL");
             
             try
             {
-                int id = MainMenu.ReadInteger("\nEnter country ID to update: ");
-                var country = await _countryRepository.GetByIdAsync(id);
+                int id = MainMenu.ReadInteger("\nEnter ARL ID to update: ");
+                var arl = await _arlRepository.GetByIdAsync(id);
 
-                if (country == null)
+                if (arl == null)
                 {
-                    MainMenu.ShowMessage("\n❌ The country doesn't exist", ConsoleColor.Red);
+                    MainMenu.ShowMessage("\n❌ The ARL doesn't exist", ConsoleColor.Red);
                 }
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.White;
                     Console.WriteLine($"\nCurrent Information:");
-                    Console.WriteLine($"Country ID: {country.Id}");
-                    Console.WriteLine($"Name: {country.Name}");
+                    Console.WriteLine($"ARL ID: {arl.Id}");
+                    Console.WriteLine($"Name: {arl.Name}");
                     Console.ResetColor();
                     
-                    string nombre = MainMenu.ReadText($"Enter new name country ({country.Name}): ");
+                    string nombre = MainMenu.ReadText($"Enter new name ARL ({arl.Name}): ");
                     if (!string.IsNullOrWhiteSpace(nombre))
                     {
-                        country.Name = nombre;
+                        arl.Name = nombre;
                     }
 
                     Console.Clear();
-                    MainMenu.ShowHeader("UPDATED COUNTRY INFORMATION");
+                    MainMenu.ShowHeader("UPDATED ARL INFORMATION");
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"Country ID: {country.Id}");
-                    Console.WriteLine($"Name: {country.Name}");
+                    Console.WriteLine($"ARL ID: {arl.Id}");
+                    Console.WriteLine($"Name: {arl.Name}");
                     Console.ResetColor();
 
                     string confirm = MainMenu.ReadText("\nDo you want to save these changes? (Y/N): ");
                     if (confirm.ToUpper() == "Y")
                     {
-                        bool result = await _countryRepository.UpdateAsync(country);
+                        bool result = await _arlRepository.UpdateAsync(arl);
                         
                         if (result)
                         {
-                            MainMenu.ShowMessage("\n✅ Country updated successfully.", ConsoleColor.Green);
+                            MainMenu.ShowMessage("\n✅ ARL updated successfully.", ConsoleColor.Green);
                         }
                         else
                         {
-                            MainMenu.ShowMessage("\n❌ Failed to update the country.", ConsoleColor.Red);
+                            MainMenu.ShowMessage("\n❌ Failed to update the ARL.", ConsoleColor.Red);
                         }
                     }
                     else
@@ -230,7 +229,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error updating the country: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error updating the ARL: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -239,41 +238,41 @@ namespace InventoryManagement.Application.UI
             Console.ReadKey();
         }
 
-        private async Task DeleteCountry()
+        private async Task DeleteArl()
         {
             Console.Clear();
-            MainMenu.ShowHeader("DELETE COUNTRY");
+            MainMenu.ShowHeader("DELETE ARL");
             
             try
             {
-                int id = MainMenu.ReadInteger("\nEnter the country ID to delete: ");
-                var country = await _countryRepository.GetByIdAsync(id);
+                int id = MainMenu.ReadInteger("\nEnter the ARL ID to delete: ");
+                var arl = await _arlRepository.GetByIdAsync(id);
 
-                if (country == null)
+                if (arl == null)
                 {
-                    MainMenu.ShowMessage("\n❌ The country does not exist.", ConsoleColor.Red);
+                    MainMenu.ShowMessage("\n❌ The ARL does not exist.", ConsoleColor.Red);
                 }
                 else 
                 {
                     Console.ForegroundColor = ConsoleColor.White;
-                    Console.WriteLine($"\nCountry Information:");
-                    Console.WriteLine($"ID: {country.Id}");
-                    Console.WriteLine($"Name: {country.Name}");
+                    Console.WriteLine($"\nARL Information:");
+                    Console.WriteLine($"ID: {arl.Id}");
+                    Console.WriteLine($"Name: {arl.Name}");
                     Console.ResetColor();
                     
-                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this country? (Y/N): ");
+                    string confirm = MainMenu.ReadText("\n⚠️ Are you sure you want to delete this ARL? (Y/N): ");
                     
                     if (confirm.ToUpper() == "Y")
                     {
-                        bool result = await _countryRepository.DeleteAsync(id);
+                        bool result = await _arlRepository.DeleteAsync(id);
                         
                         if (result)
                         {
-                            MainMenu.ShowMessage("\n✅ Country deleted successfully.", ConsoleColor.Green);
+                            MainMenu.ShowMessage("\n✅ ARL deleted successfully.", ConsoleColor.Green);
                         }
                         else
                         {
-                            MainMenu.ShowMessage("\n❌ Failed to delete the country.", ConsoleColor.Red);
+                            MainMenu.ShowMessage("\n❌ Failed to delete the ARL.", ConsoleColor.Red);
                         }
                     }
                     else
@@ -284,7 +283,7 @@ namespace InventoryManagement.Application.UI
             }
             catch (Exception ex)
             {
-                MainMenu.ShowMessage($"\n❌ Error deleting the country: {ex.Message}", ConsoleColor.Red);
+                MainMenu.ShowMessage($"\n❌ Error deleting the ARL: {ex.Message}", ConsoleColor.Red);
             }
 
             Console.ForegroundColor = ConsoleColor.Yellow;

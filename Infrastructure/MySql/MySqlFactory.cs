@@ -93,5 +93,16 @@ public class MySqlDbFactory : IDbFactory
         return new PersonTelephoneRepository(connection);
     }
 
+    public IArlRepository CreateArlRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new ArlRepository(connection);
+    }
+
+    public IEpsRepository CreateEpsRepository()
+    {
+        var connection = ConexionSingleton.Instancia(_connectionString).ObtenerConexion();
+        return new EpsRepository(connection);
+    }
 
 }
